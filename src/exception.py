@@ -1,6 +1,5 @@
 import sys
-import logging
-
+from src.logger import logging  # ✅ Use global logger setup
 
 def error_message_details(error, error_detail: sys):
     """
@@ -16,17 +15,11 @@ def error_message_details(error, error_detail: sys):
 
 class CustomException(Exception):
     def __init__(self, error, error_detail: sys):
-        # ✅ Fixed: pass the actual error object, not just message text
         super().__init__(str(error))
         self.error_message = error_message_details(error, error_detail=error_detail)
+        logging.error(self.error_message)  # ✅ Automatically log the error message
 
     def __str__(self):
         return self.error_message
 
 
-if __name__ == "__main__":
-    logging.basicConfig(
-        filename="error.log",
-        level=logging.INFO,
-        format="[%(asctime)s] %(name)s %(levelname)s: %(message)s"
-    )
